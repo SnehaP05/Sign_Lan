@@ -2,6 +2,8 @@ import streamlit as st
 import os
 import gdown
 from ultralytics import YOLO
+import sys
+st.write(sys.version)
 
 # ✅ Safe import for OpenCV
 try:
@@ -17,9 +19,9 @@ from streamlit_webrtc import webrtc_streamer, VideoTransformerBase
 # ---------------------------
 MODEL_URL = "https://drive.google.com/file/d/1DBjJuUmicuUHrSLchCvpbG8oJK9DOwZo/view?usp=drive_link"  # 🔥 replace
 
-if not os.path.exists("best.pt"):
+if not os.path.exists("yolo26n.pt"):
     with st.spinner("Downloading model..."):
-        gdown.download(MODEL_URL, "best.pt", quiet=False)
+        gdown.download(MODEL_URL, "yolo26n.pt", quiet=False)
 
 # ---------------------------
 # 🤖 Load model
