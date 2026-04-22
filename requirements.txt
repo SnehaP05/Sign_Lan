@@ -5,3 +5,4 @@ streamlit-webrtc==0.47.1
 av==9.2.0
 gdown
 numpy==1.24.4
+python-3.10
