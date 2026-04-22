@@ -5,7 +5,15 @@ from ultralytics import YOLO
 import cv2
 import numpy as np
 
-# ---------------------------
+import streamlit as st
+import os
+
+os.environ["OPENCV_IO_ENABLE_OPENEXR"] = "1"
+
+import cv2
+from ultralytics import YOLO
+
+
 # 📥 Load model
 # ---------------------------
 MODEL_URL = "https://drive.google.com/file/d/1DBjJuUmicuUHrSLchCvpbG8oJK9DOwZo/view?usp=drive_link"
