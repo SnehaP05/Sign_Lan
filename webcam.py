@@ -1,14 +1,21 @@
 import streamlit as st
-import cv2
 import os
 import gdown
 from ultralytics import YOLO
+
+# ✅ Safe import for OpenCV
+try:
+    import cv2
+except ImportError:
+    st.error("❌ OpenCV failed to load. Check requirements.txt and Python version.")
+    st.stop()
+
 from streamlit_webrtc import webrtc_streamer, VideoTransformerBase
 
 # ---------------------------
-# 📥 Download model if not exists
+# 📥 Download model if needed
 # ---------------------------
-MODEL_URL = "https://drive.google.com/file/d/1E_RI5Tc_7uchA6n64opvWPatNHBgeoa3/view?usp=drive_link"  # 🔥 replace
+MODEL_URL = "https://drive.google.com/file/d/1DBjJuUmicuUHrSLchCvpbG8oJK9DOwZo/view?usp=drive_link"  # 🔥 replace
 
 if not os.path.exists("best.pt"):
     with st.spinner("Downloading model..."):
@@ -17,7 +24,7 @@ if not os.path.exists("best.pt"):
 # ---------------------------
 # 🤖 Load model
 # ---------------------------
-model = YOLO("best.pt")
+model = YOLO("yolo26n.pt")
 
 # ---------------------------
 # 🎨 UI Setup
@@ -27,7 +34,7 @@ st.title("🖐️ Sign Language Detection")
 st.markdown("Real-time detection using YOLOv8 + Streamlit")
 
 col1, col2 = st.columns([2, 1])
-json_placeholder = col2.empty()
+json_box = col2.empty()
 
 # ---------------------------
 # 🎥 Video Processor
@@ -54,19 +61,19 @@ class VideoProcessor(VideoTransformerBase):
                         "bbox": [x1, y1, x2, y2]
                     })
 
-                    # Draw box
-                    cv2.rectangle(img, (x1, y1), (x2, y2), (0,255,0), 2)
+                    # 🎯 Draw box
+                    cv2.rectangle(img, (x1, y1), (x2, y2), (0, 255, 0), 2)
                     cv2.putText(img, f"{label} {conf:.2f}",
                                 (x1, y1 - 10),
                                 cv2.FONT_HERSHEY_SIMPLEX,
                                 0.8,
-                                (0,255,0), 2)
+                                (0, 255, 0), 2)
 
-        # Show JSON
+        # 📊 Update JSON panel
         if detections:
-            json_placeholder.json(detections)
+            json_box.json(detections)
         else:
-            json_placeholder.write("No detection")
+            json_box.write("No detection")
 
         return img
 
